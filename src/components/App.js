@@ -1,33 +1,22 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import { FooterSection, HeaderSection } from './sections'
+import styles from './styles/App.scss'
 
-import Header from './header';
-import Body from './body';
-import Contact from './contact';
-import Footer from './footer';
-import ReactGA from 'react-ga'
+export default class App extends Component {
 
-class App extends Component {
+  static get propTypes () {
+    return {
+      children: React.PropTypes.any
+    }
+  }
 
   render() {
-
-    if (typeof window != 'undefined') {
-      ReactGA.initialize('UA-75758860-2');
-      ReactGA.pageview('/')
-    }
-
     return (
-      <section>
-        <Header />
-        <Body />
-        <Contact />
-        <Footer />
-      </section>
-    );
+      <div className={styles.App}>
+        <HeaderSection />
+        {this.props.children}
+        <FooterSection />
+      </div>
+    )
   }
 }
-
-App.propTypes = {
-  children: PropTypes.any
-};
-
-export default App;

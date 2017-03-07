@@ -1,14 +1,22 @@
-import React, { Component } from 'react';
-import globalStyles from '../assets/styles/globals.scss';
-import localStyles from './styles/contact.scss';
+import React, { Component } from 'react'
+import globalStyles from '../styles/global.scss'
+import localStyles from './styles/ContactSection.scss'
 import Popover from 'react-popover'
 
-const tower = '../assets/images/tower.svg';
-const team = '../assets/images/teamblue.png';
+//assets
+import tower from '../../assets/images/tower.svg'
+import team from '../../assets/images/teamblue.png'
 
-const styles = Object.assign({}, globalStyles, localStyles);
+import { sections } from '../../assets/strings'
 
-export default class Contact extends Component {
+const styles = Object.assign({}, localStyles, globalStyles)
+export default class ContactSection extends Component {
+
+  static get propTypes () {
+    return {
+      page: React.PropTypes.bool
+    }
+  }
 
   constructor (props) {
     super(props)
@@ -76,8 +84,8 @@ export default class Contact extends Component {
       return
     }
 
-    if (!this.validateMessage()) return
     if (!this.validateEmail()) return
+    if (!this.validateMessage()) return
 
     this.setState({ spinnerClass: 'fa-spin fa-refresh' })
 
@@ -87,8 +95,22 @@ export default class Contact extends Component {
     req.onreadystatechange = () => {
       if (req.readyState === 4 && req.status === 200) {
         const result = JSON.parse(req.responseText)
-        if (result.status === 'sent' || result.status === 'queued') {
-          this.setState({ status: req.status, sent: true, spinnerClass: 'fa-check', sendText: 'Sent!' })
+        if (result.status == 'sent' || result.status == 'queued') {
+          this.setState({
+            status: req.status,
+            sent: true,
+            spinnerClass: 'fa-check',
+            sendText: 'Sent!'
+          })
+        }
+        else {
+          this.setState({
+            status: req.status,
+            sent: true,
+            spinnerClass: 'fa-warning',
+            error: 'Sorry, we weren\'t able to read your message. Please email hello@langa.io',
+            open: true
+          })
         }
       }
       else if (req.readyState === 4 && (req.status === 0 || req.status === 403)) {
@@ -121,61 +143,53 @@ export default class Contact extends Component {
   }
 
   render () {
+    const strings = sections.contact
     const { sendText, spinnerClass, error, open } = this.state
-      return (
-        <div className={styles.Contact}>
-          <div className={styles.Container}>
+    const sectionStyle = this.props.page ? '' : styles.section
 
-          <h1>Contact</h1>
-          <div className={styles.main}>
-
-            <div>
-              <div className={`${styles.contactTower}`}>
-
-                <form className={`${styles.form}`}>
-                  <input placeholder="What's your Email Address?" onChange={e => this.onEmailChanged(e)}></input>
-                  <input placeholder='Message Subject' onChange={e => this.onSubjectChanged(e)}></input>
-                  <textarea
-                    placeholder='How can we help?'
-                    type="text"
-                    onChange={e => this.onMessageChanged(e)}
-                    className={`${styles.projectInfo}`}>
-                  </textarea>
-                  <button type="button" className={`${styles.submit}`} onClick={e => this.submitForm(e)}>
-                    <i className={'fa ' + spinnerClass} />
-                    {sendText}
-                  </button>
-
-                  <Popover
-                    offset={8}
-                    enterExitTransitionDurationMs={200}
-                    refreshIntervalMs={10000}
-                    className={styles.Popoverbody}
-                    isOpen={open}
-                    body={
-                      <div>
-                        {error}
-                      </div>
-                    }
-                    onOuterAction={() => this.closePopover()}
-                    place='below'>
-                      <div className="target" onClick={() => this.closePopover()}>
-                      </div>
-                  </Popover>
-
-                </form>
-
-                <img src={tower} className={`${styles.tower}`}/>
-
-              </div>
-
-              <img src={team} className={`${styles.teamimage}`}/>
-
-            </div>
-
+    return (
+      <div className={`${styles.Contact} ${sectionStyle}`}>
+        <div className={`${styles.main} ${styles.flexMiddle}`}>
+          <h1>{strings.title}</h1>
+          <h2>
+            {strings.blurb}
+          </h2>
+          <div className={`${styles.contactTower}`}>
+            <form className={`${styles.form}`}>
+              <input placeholder="What's your Email Address?" onChange={e => this.onEmailChanged(e)}></input>
+              <input placeholder="Message Subject" onChange={e => this.onSubjectChanged(e)}></input>
+              <textarea
+                placeholder="How can we help?"
+                type="text"
+                onChange={e => this.onMessageChanged(e)}
+                className={`${styles.projectInfo}`}>
+              </textarea>
+              <button type="button" className={`${styles.submit}`} onClick={e => this.submitForm(e)}>
+                <i className={'fa ' + spinnerClass} />
+                {sendText}
+              </button>
+              <Popover
+                offset={8}
+                enterExitTransitionDurationMs={200}
+                refreshIntervalMs={10000}
+                className={styles.Popoverbody}
+                isOpen={open}
+                body={
+                  <div>
+                    {error}
+                  </div>
+                }
+                onOuterAction={() => this.closePopover()}
+                place="below">
+                  <div className="target" onClick={() => this.closePopover()}>
+                  </div>
+              </Popover>
+            </form>
+            <img src={tower} className={`${styles.tower}`}/>
           </div>
+          <img src={team} className={`${styles.teamimage}`}/>
         </div>
       </div>
-    );
+    )
   }
 }
