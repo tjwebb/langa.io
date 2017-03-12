@@ -23,8 +23,13 @@
   "license": "MIT",
   "homepage": "https://github.com/langateam/langa.io",
   "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.4.0",
     "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
-    "babel-plugin-transform-es3-property-literals": "^6.22.0"
+    "babel-plugin-transform-es3-property-literals": "^6.22.0",
+    "babel-preset-env": "^1.2.1",
+    "eslint-plugin-react": "^6.10.0",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
     "babel": "^6.5.2",
@@ -50,7 +55,10 @@
     "gulp-babel": "^6.1.2",
     "gulp-batch": "^1.0.5",
     "gulp-imagemin": "^3.1.1",
+    "gulp-minify": "0.0.15",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.1.0",
     "gulp-watch": "^4.3.9",
     "hapi": "^14.2.0",
     "hapi-react-views": "^9.1.1",
