@@ -55,7 +55,7 @@ module.exports = [
   {
     method: 'POST',
     path: '/contact',
-    handler: 'ContactController.contact'
+    handler: 'ContactController.email'
   }
 
 ]
